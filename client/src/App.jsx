@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 /* ---------------------------------------------------------
-   ROMA (羅馬) — single-file, fully self-contained App.jsx
+    ROMA (羅馬) — Full Audio Integrated App.jsx
 --------------------------------------------------------- */
 
 const ACCENT = "#FFB84D";
@@ -116,6 +116,7 @@ const UI = {
   },
 };
 
+// تم إضافة حقل url لكل تراك (يمكنك وضع مسارات ملفات الـ MP3 داخل مجلد public أو روابط خارجية مع دعم CORS)
 const PLAYLISTS = [
   {
     id: "amber",
@@ -124,18 +125,21 @@ const PLAYLISTS = [
     tracks: [
       {
         id: "t1",
+        url: "/audio/t1.mp3",
         title: { ar: "همسات الصحراء", en: "Desert Whispers", hi: "रेगिस्तान की फुसफुसाहट", zh: "沙漠的低语" },
         artist: { ar: "ياسمين النجار", en: "Yasmine Al-Najjar", hi: "यास्मीन अल-नज्जार", zh: "亚斯敏·纳贾尔" },
         duration: 214,
       },
       {
         id: "t2",
+        url: "/audio/t2.mp3",
         title: { ar: "درب الحرير", en: "Silk Road", hi: "रेशम मार्ग", zh: "丝绸之路" },
         artist: { ar: "كريم رياض", en: "Karim Riad", hi: "करीम रियाद", zh: "卡里姆·里亚德" },
         duration: 251,
       },
       {
         id: "t3",
+        url: "/audio/t3.mp3",
         title: { ar: "سهرة على القمر", en: "Evening Under the Moon", hi: "चाँद के नीचे शाम", zh: "月下夜话" },
         artist: { ar: "لمى حسن", en: "Lama Hassan", hi: "लमा हसन", zh: "拉玛·哈桑" },
         duration: 198,
@@ -149,18 +153,21 @@ const PLAYLISTS = [
     tracks: [
       {
         id: "t4",
+        url: "/audio/t4.mp3",
         title: { ar: "أحلام ملونة", en: "Colorful Dreams", hi: "रंगीन सपने", zh: "缤纷之梦" },
         artist: { ar: "أنجالي ميهرا", en: "Anjali Mehra", hi: "अंजलि मेहरा", zh: "安贾莉·梅赫拉" },
         duration: 227,
       },
       {
         id: "t5",
+        url: "/audio/t5.mp3",
         title: { ar: "مطر الرياح الموسمية", en: "Monsoon Rain", hi: "मानसून की बारिश", zh: "季风雨" },
         artist: { ar: "روهان كابور", en: "Rohan Kapoor", hi: "रोहन कपूर", zh: "罗汉·卡普尔" },
         duration: 205,
       },
       {
         id: "t6",
+        url: "/audio/t6.mp3",
         title: { ar: "نغمة القلب", en: "Tune of the Heart", hi: "दिल की धुन", zh: "心之旋律" },
         artist: { ar: "بريا شارما", en: "Priya Sharma", hi: "प्रिया शर्मा", zh: "普里娅·夏尔马" },
         duration: 240,
@@ -174,18 +181,21 @@ const PLAYLISTS = [
     tracks: [
       {
         id: "t7",
+        url: "/audio/t7.mp3",
         title: { ar: "تحت ضوء القمر", en: "Under the Moonlight", hi: "चाँदनी के नीचे", zh: "月光下" },
         artist: { ar: "لين مينغ", en: "Lin Meng", hi: "लिन मेंग", zh: "林梦" },
         duration: 233,
       },
       {
         id: "t8",
+        url: "/audio/t8.mp3",
         title: { ar: "مطر جيانغنان", en: "Jiangnan Rain", hi: "जियांगनान की बारिश", zh: "江南雨" },
         artist: { ar: "تشين زيهان", en: "Chen Zihan", hi: "चेन ज़िहान", zh: "陈子涵" },
         duration: 219,
       },
       {
         id: "t9",
+        url: "/audio/t9.mp3",
         title: { ar: "درب الحرير", en: "Silk Road Reprise", hi: "रेशम मार्ग की गूँज", zh: "丝路回响" },
         artist: { ar: "تشو شياو", en: "Zhou Xiao", hi: "चाओ श्याओ", zh: "周晓" },
         duration: 248,
@@ -199,18 +209,21 @@ const PLAYLISTS = [
     tracks: [
       {
         id: "t10",
+        url: "/audio/t10.mp3",
         title: { ar: "أضواء المدينة", en: "City Lights", hi: "शहर की रोशनी", zh: "城市之光" },
         artist: { ar: "نوفا راي", en: "Nova Ray", hi: "नोवा रे", zh: "诺娃·雷" },
         duration: 202,
       },
       {
         id: "t11",
+        url: "/audio/t11.mp3",
         title: { ar: "قوارب ورقية", en: "Paper Boats", hi: "कागज़ की नावें", zh: "纸船" },
         artist: { ar: "ذا واندرينغ آورز", en: "The Wandering Hours", hi: "द वांडरिंग आवर्स", zh: "游荡时光乐队" },
         duration: 211,
       },
       {
         id: "t12",
+        url: "/audio/t12.mp3",
         title: { ar: "الساعة الذهبية", en: "Golden Hour", hi: "सुनहरा समय", zh: "黄金时刻" },
         artist: { ar: "ميرا لين", en: "Mira Lane", hi: "मीरा लेन", zh: "米拉·莱恩" },
         duration: 236,
@@ -251,26 +264,55 @@ export default function App() {
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const intervalRef = useRef(null);
+
+  // استخدام useRef لإنشاء كائن الصوت الحقيقي وتشغيله بسلاسة
+  const audioRef = useRef(new Audio());
 
   const t = UI[lang];
   const dir = LANG_META[lang].dir;
   const currentTrack = ALL_TRACKS[trackIndex];
 
+  // تحديث مصدر الصوت عند تغيير التراك
   useEffect(() => {
+    const audio = audioRef.current;
+    audio.src = currentTrack.url;
+    audio.load();
     if (isPlaying) {
-      intervalRef.current = setInterval(() => {
-        setElapsed((e) => {
-          if (e + 1 >= currentTrack.duration) {
-            setTrackIndex((i) => (i + 1) % ALL_TRACKS.length);
-            return 0;
-          }
-          return e + 1;
-        });
-      }, 1000);
+      audio.play().catch((err) => console.log("Playback error:", err));
     }
-    return () => clearInterval(intervalRef.current);
-  }, [isPlaying, currentTrack]);
+  }, [trackIndex]);
+
+  // التحكم في التشغيل والإيقاف بناءً على حالة isPlaying
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.play().catch((err) => console.log("Playback error:", err));
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying]);
+
+  // الاستماع لأحداث تحديث الوقت وانتهاء الأغنية للانتقال التلقائي
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    const handleTimeUpdate = () => {
+      setElapsed(audio.currentTime);
+    };
+
+    const handleEnded = () => {
+      setTrackIndex((i) => (i + 1) % ALL_TRACKS.length);
+      setElapsed(0);
+    };
+
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, []);
 
   const toggleLike = (id) => {
     setLiked((prev) => {
@@ -286,15 +328,21 @@ export default function App() {
     setIsPlaying(true);
   };
 
-  const togglePlay = () => setIsPlaying((p) => !p);
+  // دالة togglePlay للتحكم في التشغيل والإيقاف الفعلي
+  const togglePlay = () => {
+    setIsPlaying((prev) => !prev);
+  };
 
   const next = () => {
     setTrackIndex((i) => (i + 1) % ALL_TRACKS.length);
     setElapsed(0);
+    setIsPlaying(true);
   };
+
   const prev = () => {
     setTrackIndex((i) => (i - 1 + ALL_TRACKS.length) % ALL_TRACKS.length);
     setElapsed(0);
+    setIsPlaying(true);
   };
 
   const filteredTracks = useMemo(() => {
@@ -494,7 +542,7 @@ export default function App() {
               <p className="text-sm font-semibold truncate">{currentTrack.title[lang]}</p>
               <p className="text-[11px] truncate" style={{ color: TEXT_MUTED }}>{currentTrack.artist[lang]}</p>
               <div className="mt-1.5 h-[3px] rounded-full w-full overflow-hidden" style={{ background: "rgba(255,255,255,0.2)" }}>
-                <div className="h-full rounded-full transition-all duration-300" style={{ width: `${(elapsed / currentTrack.duration) * 100}%`, background: ACCENT }} />
+                <div className="h-full rounded-full transition-all duration-300" style={{ width: `${currentTrack.duration ? (elapsed / currentTrack.duration) * 100 : 0}%`, background: ACCENT }} />
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
@@ -539,7 +587,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Language modal - Updated with smooth appearance and active positive styling */}
+        {/* Language modal */}
         {showLangMenu && (
           <div
             className="absolute inset-0 z-30 flex items-end justify-center backdrop-blur-sm transition-opacity"
