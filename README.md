@@ -5,7 +5,7 @@ A sophisticated, modern multilingual audio platform designed to bridge cultures 
 ---
 
 ## 🌟 Overview
-**ROMA** is an interactive web application built with React and Tailwind CSS, featuring a dynamic interface that supports seamless switching between multiple languages and writing systems (including dynamic LTR/RTL text display). It offers a culturally rich music experience with customized palettes for diverse musical genres.
+**ROMA** is an interactive web application built with React and Tailwind CSS, featuring a dynamic interface that supports seamless switching between multiple languages and writing systems, including full LTR/RTL layout mirroring. It offers a culturally rich music experience with a distinct color identity for each supported language and culture.
 
 ---
 
