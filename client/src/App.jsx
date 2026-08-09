@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { Play, Pause, Search, Heart, Music, Globe, Library, Home } from 'lucide-react';
+import { Play, Pause, Search, Heart, Music, Globe, Library, Home, ChevronDown } from 'lucide-react';
 
 export default function App() {
   const [lang, setLang] = useState('en');
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+
+  // تعريف اللغات الأربع
+  const languages = [
+    { code: 'ar', label: 'العربية' },
+    { code: 'en', label: 'English' },
+    { code: 'hi', label: 'हिन्दी' },
+    { code: 'zh', label: '中文' },
+  ];
 
   // نظام الألوان المخصص من تصميمك
   const colors = {
@@ -32,15 +41,37 @@ export default function App() {
       dir={lang === 'ar' ? 'rtl' : 'ltr'}
     >
       {/* Header */}
-      <header className="p-6 flex justify-between items-center">
+      <header className="p-6 flex justify-between items-center relative">
         <h1 className="text-2xl font-bold tracking-wider">ROMA</h1>
-        <button 
-          onClick={() => setLang(lang === 'ar' ? 'en' : 'ar')}
-          className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-sm flex items-center gap-2 border border-white/20"
-        >
-          <Globe className="w-4 h-4" />
-          {lang === 'ar' ? 'العربية' : 'English'}
-        </button>
+        
+        {/* Language Dropdown */}
+        <div className="relative">
+          <button 
+            onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+            className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-sm flex items-center gap-2 border border-white/20 hover:bg-white/20 transition-all"
+          >
+            <Globe className="w-4 h-4" />
+            {languages.find(l => l.code === lang)?.label}
+            <ChevronDown className="w-4 h-4 opacity-70" />
+          </button>
+
+          {isLangMenuOpen && (
+            <div className="absolute top-full right-0 mt-2 w-32 bg-[#1a0b33] border border-white/10 rounded-xl overflow-hidden shadow-2xl z-50">
+              {languages.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => {
+                    setLang(l.code);
+                    setIsLangMenuOpen(false);
+                  }}
+                  className={`w-full text-start px-4 py-3 hover:bg-white/10 transition-colors ${lang === l.code ? 'text-[#FFB84D] font-bold' : ''}`}
+                >
+                  {l.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Hero Section */}
